@@ -4,6 +4,7 @@
 
 
 import math
+import sys
 
 
 class ComputingPoint:
@@ -72,11 +73,20 @@ class MidPoint:
         return self
 
 def main():
+    classic = ComputingPoint(cotone=math.pi*12/math.log(2.0))
+    print(f"classic cotone={classic.cotone}")
+#    sys.exit(0)
     cpoints = list()
     mpoints = list()
-    first = ComputingPoint(cotone=1.0 / math.log(2.0)).bump()
+    # 12.0 is the classic. {12.01226522952678, 12.012322435401824}
+    first = ComputingPoint(cotone=math.pi*11.0 / math.log(2.0)).bump()
+#    first = ComputingPoint(cotone=math.pi*30.9690 / math.log(2.0)).bump()
     cpoints.append(first)
-    last = ComputingPoint(cotone=36.0 / math.log(2.0)).bump()
+    # ~41.0 is next better. {40.99026553761196, 40.99042247831756}
+    last = ComputingPoint(cotone=math.pi*40.0 / math.log(2.0)).bump()
+#    last = ComputingPoint(cotone=math.pi*30.9695 / math.log(2.0)).bump()
+    # ~31 is to be found, it is better than the known ~19. {18.952311277376694, 18.95282021060691}
+    # It is somewhere around {30.969307519580894, 30.969306649168946}.
     cpoints.append(last)
     min_val = min(first.val_lo, last.val_lo)
     mid = MidPoint(prev_cpoint=first, next_cpoint=last).bump(min_val=min_val)
@@ -104,7 +114,7 @@ def main():
         new_max = new_bumped_cpoint.val_hi
         if new_max < old_max:
             print(f"New max: cotone={new_bumped_cpoint.cotone}, iteration={new_bumped_cpoint.iteration}, min={new_min}, max={new_max}", flush=True)
-            print(f"tones per octave: {new_bumped_cpoint.cotone * math.log(2.0)}", flush=True)
+            print(f"tones per octave: {new_bumped_cpoint.cotone * math.log(2.0) / math.pi}", flush=True)
             old_max = new_max
         if new_bumped_cpoint.iteration <= old_iter:
             bumps += 1
