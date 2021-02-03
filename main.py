@@ -101,15 +101,16 @@ def main():
     old_iter = 0
     bumps = 0
     while 1:
-        #cpoints.sort(key=lambda x: x.val_lo)
-        best_index = None
-        best_val = 10.0
-        for index, point in enumerate(cpoints):
-            val_lo = point.val_lo
-            if val_lo < best_val:
-                best_val = val_lo
-                best_index = index
-        cpoints[0], cpoints[best_index] = cpoints[best_index], cpoints[0]
+        cpoints.sort(key=lambda x: x.val_lo)
+        ## Timsort in C is faster than finding best in Python.
+        #best_index = None
+        #best_val = 10.0
+        #for index, point in enumerate(cpoints):
+        #    val_lo = point.val_lo
+        #    if val_lo < best_val:
+        #        best_val = val_lo
+        #        best_index = index
+        #cpoints[0], cpoints[best_index] = cpoints[best_index], cpoints[0]
         new_bumped_cpoint = cpoints[0]
 #        print(f"Debug bumping cpoint at cotone {new_bumped_cpoint.cotone}; old_min: {new_bumped_cpoint.val_lo}, old_max: {new_bumped_cpoint.val_hi}")
         new_bumped_cpoint.bump()
@@ -128,11 +129,14 @@ def main():
             bumps += 1
             continue
         old_iter = new_bumped_cpoint.iteration
+#        if old_iter >= 1300:
+#            sys.exit(0)
 #        if new_bumped_cpoint.cotone != old_bumped_cotone:
 ##            print(f"Debug best cpoint changed, not bisecting.")
 #            old_bumped_cotone = new_bumped_cpoint.cotone
 #            continue
         #mpoints.sort(key=lambda x: x.slope)
+        ## Timsort in C is not faster, as many slopes got upgraded in the meantime.
         best_index = None
         best_slope = 1e100
         for index, point in enumerate(mpoints):
