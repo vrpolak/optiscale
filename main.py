@@ -101,7 +101,15 @@ def main():
     old_iter = 0
     bumps = 0
     while 1:
-        cpoints.sort(key=lambda x: x.val_lo)
+        #cpoints.sort(key=lambda x: x.val_lo)
+        best_index = None
+        best_val = 10.0
+        for index, point in enumerate(cpoints):
+            val_lo = point.val_lo
+            if val_lo < best_val:
+                best_val = val_lo
+                best_index = index
+        cpoints[0], cpoints[best_index] = cpoints[best_index], cpoints[0]
         new_bumped_cpoint = cpoints[0]
 #        print(f"Debug bumping cpoint at cotone {new_bumped_cpoint.cotone}; old_min: {new_bumped_cpoint.val_lo}, old_max: {new_bumped_cpoint.val_hi}")
         new_bumped_cpoint.bump()
@@ -124,18 +132,27 @@ def main():
 ##            print(f"Debug best cpoint changed, not bisecting.")
 #            old_bumped_cotone = new_bumped_cpoint.cotone
 #            continue
-        mpoints.sort(key=lambda x: x.slope)
+        #mpoints.sort(key=lambda x: x.slope)
+        best_index = None
+        best_slope = 1e100
+        for index, point in enumerate(mpoints):
+            slope = point.slope
+            if slope < best_slope:
+                best_slope = slope
+                best_index = index
+        mpoints[0], mpoints[best_index] = mpoints[best_index], mpoints[0]
         chosen = mpoints[0]
         print(f"Choosing to upgrade previous midpoint at cotone={chosen.cotone}, slope={chosen.slope}; max slope at cotone={mpoints[-1].cotone}, slope={mpoints[-1].slope}", flush=True)
         prev_slope = None if new_bumped_cpoint.prev_mpoint is None else new_bumped_cpoint.prev_mpoint.slope
         next_slope = None if new_bumped_cpoint.next_mpoint is None else new_bumped_cpoint.next_mpoint.slope
         print(f"Cpoint bumps since last print: {bumps}. Slopes near best; prev={prev_slope}, next={next_slope}", flush=True)
         bumps = 0
-        mpoints = mpoints[1:]
+        #mpoints = mpoints[1:]
         new_cpoint = ComputingPoint(cotone=chosen.cotone, prev_cpoint=chosen.prev_cpoint, next_cpoint=chosen.next_cpoint).bump()
         cpoints.append(new_cpoint)
         prev_mpoint = MidPoint(prev_cpoint=chosen.prev_cpoint, next_cpoint=new_cpoint).bump(min_val=new_min)
-        mpoints.append(prev_mpoint)
+        #mpoints.append(prev_mpoint)
+        mpoints[0] = prev_mpoint
         next_mpoint = MidPoint(prev_cpoint=new_cpoint, next_cpoint=chosen.next_cpoint).bump(min_val=new_min)
         mpoints.append(next_mpoint)
         chosen.prev_cpoint.next_mpoint = prev_mpoint
