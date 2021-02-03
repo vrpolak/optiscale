@@ -89,6 +89,7 @@ def main():
     old_bumped_cotone = None
     old_max = 10.0
     old_iter = 0
+    bumps = 0
     while 1:
         cpoints.sort(key=lambda x: x.val_lo)
         new_bumped_cpoint = cpoints[0]
@@ -106,6 +107,7 @@ def main():
             print(f"tones per octave: {new_bumped_cpoint.cotone * math.log(2.0)}", flush=True)
             old_max = new_max
         if new_bumped_cpoint.iteration <= old_iter:
+            bumps += 1
             continue
         old_iter = new_bumped_cpoint.iteration
 #        if new_bumped_cpoint.cotone != old_bumped_cotone:
@@ -117,7 +119,8 @@ def main():
         print(f"Choosing to upgrade previous midpoint at cotone={chosen.cotone}, slope={chosen.slope}; max slope at cotone={mpoints[-1].cotone}, slope={mpoints[-1].slope}", flush=True)
         prev_slope = None if new_bumped_cpoint.prev_mpoint is None else new_bumped_cpoint.prev_mpoint.slope
         next_slope = None if new_bumped_cpoint.next_mpoint is None else new_bumped_cpoint.next_mpoint.slope
-        print(f"Slopes near best; prev={prev_slope}, next={next_slope}", flush=True)
+        print(f"Cpoint bumps since last print: {bumps}. Slopes near best; prev={prev_slope}, next={next_slope}", flush=True)
+        bumps = 0
         mpoints = mpoints[1:]
         new_cpoint = ComputingPoint(cotone=chosen.cotone, prev_cpoint=chosen.prev_cpoint, next_cpoint=chosen.next_cpoint).bump()
         cpoints.append(new_cpoint)
