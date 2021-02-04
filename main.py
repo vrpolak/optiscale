@@ -79,11 +79,11 @@ def main():
     cpoints = list()
     mpoints = list()
     # 12.0 is the classic. {12.01226522952678, 12.012322435401824}
-    first = ComputingPoint(cotone=math.pi*52.97 / math.log(2.0)).bump()
+    first = ComputingPoint(cotone=math.pi*52.99773055519658 / math.log(2.0)).bump()
 #    first = ComputingPoint(cotone=math.pi*30.9690 / math.log(2.0)).bump()
     cpoints.append(first)
     # ~41.0 is next better. {40.99026553761196, 40.99042247831756}
-    last = ComputingPoint(cotone=math.pi*53.01 / math.log(2.0)).bump()
+    last = ComputingPoint(cotone=math.pi*52.997847924486855 / math.log(2.0)).bump()
 #    last = ComputingPoint(cotone=math.pi*30.9695 / math.log(2.0)).bump()
     # ~31 is to be found, it is better than the known ~19. {18.952311277376694, 18.95282021060691}
     # It is somewhere around {30.969307519580894, 30.969306649168946}.
