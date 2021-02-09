@@ -49,6 +49,8 @@ class ComputingPoint:
 
     def bump(self):
         self.iteration += 1
+        if self.iteration % 2:
+            return self
         coeff = 1.0 / self.iteration - 1.0 / (self.iteration + 1)
         weights = list()
         intervals = list()
@@ -56,7 +58,7 @@ class ComputingPoint:
             counteriter = self.iteration - subiter
             if counteriter <= subiter:
                 break
-            if not (subiter % 2 and counteriter % 2):
+            if not subiter % 2:
                 continue
             intervals.append(counteriter / subiter)
             weights.append(subiter)
@@ -101,10 +103,10 @@ def main():
     cpoints = list()
     mpoints = list()
     # 12.0 is the classic. {12.01226522952678, 12.012322435401824}
-    first = ComputingPoint(cotone=math.pi*8.187 / math.log(2.0)).bump()
+    first = ComputingPoint(cotone=math.pi*8.1878 / math.log(2.0)).bump()
     cpoints.append(first)
     # ~41.0 is next better. {40.99026553761196, 40.99042247831756}
-    last = ComputingPoint(cotone=math.pi*8.189 / math.log(2.0)).bump()
+    last = ComputingPoint(cotone=math.pi*8.1883 / math.log(2.0)).bump()
     # ~31 is to be found, it is better than the known ~19. {18.952311277376694, 18.95282021060691}
     # It is somewhere around {30.969307519580894, 30.969306649168946}.
     cpoints.append(last)
